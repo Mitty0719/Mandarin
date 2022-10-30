@@ -9,10 +9,11 @@ class Enemy{
     this.tx = 0;
     this.ty = 0;
     this.tz = 0;
+    this.health = 10;
     this.speed = 0.01;
-    this.width = 1;
-    this.height = 1;
-    this.depth = 1;
+    this.width = 5;
+    this.height = 5;
+    this.depth = 5;
     this.color = new THREE.Color( 0xff0000 );
     this.stageWidth = stageWidth;
     this.stageHieght = stageHeight;
@@ -30,7 +31,6 @@ class Enemy{
     this.cube.position.set(this.x, this.y, this.z);
 
     scene.add(this.cube);
-    console.log(this.x, this.z);
   }
 
   move(tx, ty, tz){
@@ -43,6 +43,10 @@ class Enemy{
     this.z += (this.tz - this.z) * this.speed;
 
     this.cube.position.set(this.x, this.y, this.z);
+  }
+
+  die(){
+    this.cube.material = new THREE.MeshBasicMaterial({ color: 0x000000 });
   }
 }
 

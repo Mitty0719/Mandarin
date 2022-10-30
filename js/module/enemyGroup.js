@@ -20,7 +20,10 @@ class EnemyGroup{
       this.enemies.push(new Enemy(scene, stageWidth, stageHeight));
     }
   }
-
+  removeEnemy(target){
+    target.die();
+    this.enemies = this.enemies.filter(enemy => enemy !== target);
+  }
 }
 
 export default EnemyGroup;

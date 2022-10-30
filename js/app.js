@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import Hero from './module/hero.js';
 import EnemyGroup from './module/enemyGroup.js';
+import Shield from './module/shield.js';
 
 class App {
   constructor() {
@@ -29,6 +30,8 @@ class App {
 
     this.hero = new Hero(this.scene);
     this.enemyGroup = new EnemyGroup(this.scene, this.stageWidth, this.stateHeight);
+    this.shield = new Shield(this.scene);
+    this.shield2 = new Shield(this.scene, 180);
 
     window.addEventListener('keydown', this.handlerKeyDown.bind(this));
     window.addEventListener('keyup', this.handlerKeyUp.bind(this));
@@ -45,6 +48,12 @@ class App {
   render() {
     this.hero.move(this.keyInfo);
     this.enemyGroup.move(this.hero.x, this.hero.y, this.hero.z);
+    this.shield.move(this.hero.x, this.hero.y, this.hero.z);
+    this.shield2.move(this.hero.x, this.hero.y, this.hero.z);
+    this.shield.attack(this.enemyGroup);
+    this.shield2.attack(this.enemyGroup);
+
+
     // this.camera.lookAt(this.hero.x, this.hero.y, this.hero.z);
     this.renderer.render(this.scene, this.camera);
 
