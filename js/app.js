@@ -1,9 +1,15 @@
 import * as THREE from 'three';
+import Hero from './module/hero.js';
+import EnemyGroup from './module/enemyGroup.js';
 
 class App {
   constructor() {
     this.scene = new THREE.Scene();
     this.scene.background = new THREE.Color(0x072227);
+    this.renderer = new THREE.WebGLRenderer();
+    this.renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(this.renderer.domElement);
+
     this.camera = new THREE.PerspectiveCamera(
       75,
       window.innerWidth / window.innerHeight,
@@ -12,41 +18,46 @@ class App {
     );
     this.camera.position.set(100, 120, 150);
     this.camera.lookAt(0, 0, 0);
+    this.keyInfo = {
+      37: false,
+      38: false,
+      39: false,
+      40: false,
+    }
 
-    this.renderer = new THREE.WebGLRenderer();
-    this.renderer.setSize(window.innerWidth, window.innerHeight);
-    document.body.appendChild(this.renderer.domElement);
+    this.resize();
 
-    const geometry = new THREE.BoxGeometry(100, 100, 100);
-    const material = [
-      new THREE.MeshBasicMaterial({ color: 0x15133c }),
-      new THREE.MeshBasicMaterial({ color: 0x3f0071 }),
-      new THREE.MeshBasicMaterial({ color: 0x150050 }),
-      new THREE.MeshBasicMaterial({ color: 0xaefeff }),
-      new THREE.MeshBasicMaterial({ color: 0x4fbdba }),
-      new THREE.MeshBasicMaterial({ color: 0x35858b }),
-    ];
-    this.cube = new THREE.Mesh(geometry, material);
+    this.hero = new Hero(this.scene);
+    this.enemyGroup = new EnemyGroup(this.scene, this.stageWidth, this.stateHeight);
 
-    this.scene.add(this.cube);
-    this.renderer.render(this.scene, this.camera);
-
-    window.addEventListener('mousemove', this.moveMouse.bind(this));
+    window.addEventListener('keydown', this.handlerKeyDown.bind(this));
+    window.addEventListener('keyup', this.handlerKeyUp.bind(this));
 
     requestAnimationFrame(this.render.bind(this));
+    
   }
 
-  moveMouse(e) {
-    const cameraX = e.clientX - innerWidth / 2;
-    const cameraY = e.clientY - innerHeight / 2;
-    // this.camera.position.set(cameraX, cameraY, 300);
-    this.cube.position.set(cameraX, cameraY, 0);
+  resize(){
+    this.stageWidth = window.innerWidth;
+    this.stateHeight = window.innerHeight;
   }
 
   render() {
-    window.requestAnimationFrame(this.render.bind(this));
-
+    this.hero.move(this.keyInfo);
+    this.enemyGroup.move(this.hero.x, this.hero.y, this.hero.z);
+    // this.camera.lookAt(this.hero.x, this.hero.y, this.hero.z);
     this.renderer.render(this.scene, this.camera);
+
+    window.requestAnimationFrame(this.render.bind(this));
+  }
+
+  handlerKeyDown(e){
+    if(this.keyInfo[e.keyCode] === undefined) return;
+    this.keyInfo[e.keyCode] = true;
+  }
+  handlerKeyUp(e){
+    if(this.keyInfo[e.keyCode] === undefined) return;
+    this.keyInfo[e.keyCode] = false;
   }
 }
 
