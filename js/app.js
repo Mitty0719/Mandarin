@@ -19,7 +19,7 @@ class App {
 
     const geometry = new THREE.BoxGeometry(100, 100, 100);
     const material = [
-      new THREE.MeshBasicMaterial({ color: 0xfb2576 }),
+      new THREE.MeshBasicMaterial({ color: 0x15133c }),
       new THREE.MeshBasicMaterial({ color: 0x3f0071 }),
       new THREE.MeshBasicMaterial({ color: 0x150050 }),
       new THREE.MeshBasicMaterial({ color: 0xaefeff }),
